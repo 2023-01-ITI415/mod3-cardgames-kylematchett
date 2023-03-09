@@ -20,6 +20,10 @@ public class Prospector : MonoBehaviour
     private Transform layoutAnchor;
     private Deck deck;
     private JsonLayout jsonLayout;
+    // A Dictionary to pair mine layout IDs and actual Cards
+    private Dictionary<int, CardProspector> mineIdToCardDict;
+
+
 
     void Start()
     {
@@ -47,7 +51,8 @@ public class Prospector : MonoBehaviour
     /// </summary>
     /// <param name="listCard">A List(Card) to be converted</param>
     /// <returns>A List(CardProspector) of the converted cards</returns>
-    List<CardProspector> ConvertCardsToCardProspectors(List<Card> listCard)
+    List<CardProspector>
+    ConvertCardsToCardProspectors(List<Card> listCard)
     {
         List<CardProspector> listCP = new List<CardProspector>();
         CardProspector cp;
@@ -87,6 +92,8 @@ public class Prospector : MonoBehaviour
 
         CardProspector cp;
         // b
+        mineIdToCardDict = new Dictionary<int, CardProspector>();
+
 
         // Iterate through the JsonLayoutSlots pulled from the JSON_Layout
         foreach (JsonLayoutSlot slot in jsonLayout.slots)
@@ -112,6 +119,8 @@ public class Prospector : MonoBehaviour
             // Set the sorting layer of all SpriteRenderers on the Card
             cp.SetSpriteSortingLayer(slot.layer);
             mine.Add(cp); // Add this CardProspector to the List<> mine
+
+            mineIdToCardDict.Add(slot.id, cp);
         }
     }
 
@@ -196,5 +205,79 @@ public class Prospector : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// This turns cards in the Mine face-up and face-down
+    /// </summary>
+    public void SetMineFaceUps()
+    {
+        // d
+        CardProspector coverCP;
+        foreach (CardProspector cp in mine)
+        {
+            bool faceUp = true; // Assume the card will be face- up
+
+            // Iterate through the covering cards by mine layout ID
+            foreach (int coverID in cp.layoutSlot.hiddenBy)
+            {
+                coverCP = mineIdToCardDict[coverID];
+                // If the covering card is null or still in the mine...
+                if (coverCP == null || coverCP.state == eCardState.mine)
+                {
+                    faceUp = false; // then this card is face- down
+                }
+            }
+            cp.faceUp = faceUp; // Set the value on the card
+        }
+    }
+
+
+    static public void CARD_CLICKED(CardProspector cp)
+    {
+        // The reaction is determined by the state of the clicked card
+        switch (cp.state)
+        {
+            case eCardState.target:
+                // Clicking the target card does nothing
+                break;
+            case eCardState.drawpile:
+                // Clicking *any* card in the drawPile will draw the next card
+                // Call two methods on the Prospector Singleton S
+                S.MoveToTarget(S.Draw()); // Draw a new target card
+                S.UpdateDrawPile(); // Restack the drawPile
+                break;
+            case eCardState.mine:
+                // More to come here
+                // a
+                // Clicking a card in the mine will check if it’s a valid play
+                bool validMatch = true; // Initially assume that it’s valid
+
+                // If the card is face-down, it’s not valid
+                if (!cp.faceUp) validMatch = false;
+
+                // If it’s not an adjacent rank, it’s not valid
+                if (!cp.AdjacentTo(S.target)) validMatch = false;
+                // b
+
+                if (validMatch)
+                { // If it’s a valid card
+                    S.mine.Remove(cp); // Remove it from the tableau List 
+                    S.MoveToTarget(cp); // Make it the target card
+                    S.SetMineFaceUps();
+                }
+                break;
+        }
+
+    }
+    /// <summary> > /// Informs the Prospector class that this card has been clicked.
+    /// </summary>
+    public void OnMouseUpAsButton()
+    {
+        // Uncomment the next line to call the base class version of this method
+        // base.OnMouseUpAsButton();
+        // a
+        // Call the CardClicked method on the Prospector Singleton
+        Prospector.CARD_CLICKED(target);
+        // b
+    }
 
 }
