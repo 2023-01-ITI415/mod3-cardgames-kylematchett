@@ -244,7 +244,7 @@ public class Prospector : MonoBehaviour
                 // Call two methods on the Prospector Singleton S
                 S.MoveToTarget(S.Draw()); // Draw a new target card
                 S.UpdateDrawPile(); // Restack the drawPile
-                ScoreManager.TALLY( eScoreEvent.draw ); 
+                ScoreManager.TALLY(eScoreEvent.draw);
                 break;
             case eCardState.mine:
                 // More to come here
@@ -264,16 +264,13 @@ public class Prospector : MonoBehaviour
                     S.mine.Remove(cp); // Remove it from the tableau List 
                     S.MoveToTarget(cp); // Make it the target card
                     S.SetMineFaceUps();
-                    ScoreManager.TALLY( eScoreEvent.mine ); 
+                    ScoreManager.TALLY(eScoreEvent.mine);
                 }
                 break;
         }
         S.CheckForGameOver();
 
     }
-    /// <summary> > /// Informs the Prospector class that this card has been clicked.
-    /// </summary>
-
     /// <summary>
     /// Test whether the game is over
     /// </summary>
@@ -287,13 +284,17 @@ public class Prospector : MonoBehaviour
             return;
         }
 
-        // If there are still cards in the mine & draw pile the game’s not over > if ( drawPile.Count > 0 ) return;
+        // If there are still cards in the mine & draw pile, the game’s not over > 
+        if (drawPile.Count > 0)
+            return;
 
         // Check for remaining valid plays
         foreach (CardProspector cp in mine)
         {
+
             // If there is a valid play, the game’s not over
-            if (target.AdjacentTo(cp)) return;
+            if (target.AdjacentTo(cp))
+                return;
         }
 
         // Since there are no valid plays, the game is over
@@ -318,12 +319,11 @@ public class Prospector : MonoBehaviour
             // a
             ScoreManager.TALLY(eScoreEvent.gameLoss);
         }
-
         // Reset the CardSpritesSO singleton to null
         CardSpritesSO.RESET();
         // b
         // Reload the scene, resetting the game
-        // Note that there are TWO underscores at the beginning of "__Prospector…
+        // Note that there are TWO underscores at the  beginning of "__Prospector…
         SceneManager.LoadScene("__Prospector_Scene_0");
     }
 
