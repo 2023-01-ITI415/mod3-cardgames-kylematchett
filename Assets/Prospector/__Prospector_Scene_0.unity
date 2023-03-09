@@ -137,6 +137,7 @@ GameObject:
   - component: {fileID: 827460510}
   - component: {fileID: 827460509}
   - component: {fileID: 827460514}
+  - component: {fileID: 827460515}
   m_Layer: 0
   m_Name: _MainCamera
   m_TagString: MainCamera
@@ -234,3 +235,23 @@ MonoBehaviour:
   deck:
     decorators: []
     cards: []
+--- !u!114 &827460515
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 827460508}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d89aae87a2e4f7d4ca665bc1d840a438, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cardSprites: {fileID: 11400000, guid: 15f9129651487984999707e58c175241, type: 2}
+  prefabCard: {fileID: 9195076646068889692, guid: 71b25a0b1886ad84f9dbe7fb7bf60884,
+    type: 3}
+  prefabSprite: {fileID: 1000014090761352, guid: 30a6ba41f0d264815a76b64a60ee0b62,
+    type: 3}
+  startFaceUp: 1
+  deckAnchor: {fileID: 0}
+  cards: []
