@@ -46,6 +46,8 @@ public class ScoreBoard : MonoBehaviour
     // When called by SendMessage, this adds the fs.score to s.score
     static public void FS_CALLBACK(FloatingScore fs)
     {
-        SCORE += fs.score;
+        Debug.Log("" + ScoreManager.multiplier);
+        SCORE += fs.score * ScoreManager.multiplier;
+        ScoreManager.multiplier=1;
     }
 }

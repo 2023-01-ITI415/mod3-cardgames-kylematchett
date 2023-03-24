@@ -17,13 +17,21 @@ public class Card : MonoBehaviour
     // This List holds all of the Pip GameObjects
     public List<GameObject> pipGOs = new List<GameObject>();
 
+    public enum type{
+        normal,
+        silver,
+        gold
+    }
+    public type cardType;
+
+
     /// <summary>
     /// Creates this Card’s visuals based on suit and rank.
     /// Note that this method assumes it will be passed avalid suit and rank.
     /// </summary>
     /// <param name="eSuit">The suit of the card (e.g., ’C’)</param> > /// <param name="eRank">The rank from 1 to13</param>
     /// <returns></returns>
-    public void Init(char eSuit, int eRank, bool startFaceUp = true)
+    public void Init(char eSuit, int eRank, type type, bool startFaceUp = true)
     {
         // Assign basic values to the Card
         gameObject.name = name = eSuit.ToString() + eRank;
@@ -36,12 +44,19 @@ public class Card : MonoBehaviour
             color = Color.red;
         }
         def = JsonParseDeck.GET_CARD_DEF(rank);
+
+        
+        cardType = type;
+        
+        
         AddDecorators();
         AddPips();
-        AddFace();
+        AddFront();
+        
         // Build the card from Sprites
         // a
         AddBack();
+        AddFace();
         // a
         faceUp = startFaceUp;
     }
@@ -55,6 +70,8 @@ public class Card : MonoBehaviour
         // b
         transform.localPosition = v;
     }
+
+    
 
     // These private variables that will be reused several times // c
     private Sprite _tSprite = null;
@@ -93,7 +110,7 @@ public class Card : MonoBehaviour
             }
 
             // Make the Decorator Sprites render above theCard
-            _tSRend.sortingOrder = 1;
+            _tSRend.sortingOrder = 2;
             // g
             // Set the localPosition based on the locationfrom DeckXML
             _tGO.transform.localPosition = pip.loc;
@@ -143,7 +160,7 @@ public class Card : MonoBehaviour
             // Set the Sprite to the proper suit
             _tSRend.sprite = CardSpritesSO.SUITS[suit];
             // sortingOrder=1 renders this pip above the Card_Front
-            _tSRend.sortingOrder = 1;
+            _tSRend.sortingOrder = 2;
             // Add this to the Card’s list of pips
             pipGOs.Add(_tGO);
         }
@@ -170,7 +187,7 @@ public class Card : MonoBehaviour
         _tGO = Instantiate<GameObject>(Deck.SPRITE_PREFAB, transform); // d
         _tSRend = _tGO.GetComponent<SpriteRenderer>();
         _tSRend.sprite = _tSprite;// Assign the face Sprite to _tSRend
-        _tSRend.sortingOrder = 1;// Set the sortingOrder
+        _tSRend.sortingOrder = 2;// Set the sortingOrder
         _tGO.transform.localPosition = Vector3.zero;
         _tGO.name = faceName;
     }
@@ -191,12 +208,53 @@ public class Card : MonoBehaviour
     {
         _tGO = Instantiate<GameObject>(Deck.SPRITE_PREFAB, transform);
         _tSRend = _tGO.GetComponent<SpriteRenderer>();
-        _tSRend.sprite = CardSpritesSO.BACK;
+
+        switch (cardType){
+            case (type.normal):
+                _tSRend.sprite = CardSpritesSO.BACK;
+                break;
+            case (type.silver):
+                _tSRend.sprite = CardSpritesSO.BACKSILVER;
+                break;
+            case(type.gold):
+                _tSRend.sprite = CardSpritesSO.BACKGOLD;
+                break;
+        }
+
+        
+
+
+
         _tGO.transform.localPosition = Vector3.zero;
         // 2 is a higher sortingOrder than anything else
-        _tSRend.sortingOrder = 2;
+        _tSRend.sortingOrder = 3;
         // b
         _tGO.name = "back";
+        back = _tGO;
+    }
+    private void AddFront()
+    {
+        _tGO = Instantiate<GameObject>(Deck.SPRITE_PREFAB, transform);
+        _tSRend = _tGO.GetComponent<SpriteRenderer>();
+        
+        switch (cardType){
+            case (type.normal):
+                _tSRend.sprite = CardSpritesSO.FRONT;
+                break;
+            case (type.silver):
+                _tSRend.sprite = CardSpritesSO.FRONTSILVER;
+                break;
+            case(type.gold):
+                _tSRend.sprite = CardSpritesSO.FRONTGOLD;
+                break;
+        }
+
+
+        _tGO.transform.localPosition = Vector3.zero;
+        
+        _tSRend.sortingOrder = 1;
+        // b
+        _tGO.name = "front";
         back = _tGO;
     }
 
@@ -247,12 +305,16 @@ public class Card : MonoBehaviour
             }
             else if (srend.gameObject.name == "back")
             {
-                // If it’s the back, set it to the highest layer > srend.sortingOrder = sOrd + 2;
+                // If it’s the back, set it to the highest layer > 
+                srend.sortingOrder = sOrd + 3;
+            }
+            else if(srend.gameObject.name == "front"){
+                srend.sortingOrder = sOrd + 1;
             }
             else
             {
                 // If it’s anything else, put it in between.
-                srend.sortingOrder = sOrd + 1;
+                srend.sortingOrder = sOrd + 2;
             }
         }
     }

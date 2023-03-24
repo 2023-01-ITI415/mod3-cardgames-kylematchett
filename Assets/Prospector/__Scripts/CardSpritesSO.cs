@@ -9,8 +9,10 @@ public class CardSpritesSO : ScriptableObject
     [Header("Card Stock")]
     public Sprite cardBack;
     public Sprite cardBackGold;
+    public Sprite cardBackSilver;
     public Sprite cardFront;
     public Sprite cardFrontGold;
+    public Sprite cardFrontSilver;
 
     [Header("Suits")]
     public Sprite suitClub;
@@ -21,7 +23,7 @@ public class CardSpritesSO : ScriptableObject
     [Header("Pip Sprites")]
     public Sprite[] faceSprites;
     public Sprite[] rankSprites;
-
+    //private static Random r = new Random();
 
 
 
@@ -84,9 +86,52 @@ public class CardSpritesSO : ScriptableObject
     /// </summary>
     public static Sprite BACK
     {
-        get { return S.cardBack; }
+        get { 
+            
+           
+            return S.cardBack;
+            
+            }
     }
-
+    public static Sprite BACKGOLD
+    {
+        get { 
+            
+           
+            return S.cardBackGold;
+            
+            }
+    }
+    public static Sprite BACKSILVER
+    {
+        get { 
+            
+           
+            return S.cardBackSilver;
+            
+            }
+    }
+    public static Sprite FRONT
+    {
+        get { 
+            
+            return S.cardFront; 
+            }
+    }
+    public static Sprite FRONTSILVER
+    {
+        get { 
+            
+            return S.cardFrontSilver; 
+            }
+    }
+    public static Sprite FRONTGOLD
+    {
+        get { 
+            
+            return S.cardFrontGold; 
+            }
+    }
     /// <summary>
     /// Call this to reset the Singleton S to null at the end of a game
     /// </summary>

@@ -9,7 +9,9 @@ public enum eScoreEvent
     draw,
     mine,
     gameWin,
-    gameLoss
+    gameLoss,
+    mineGold,
+    mineSilver
 }
 // ScoreManager handles all of the scoring
 public class ScoreManager : MonoBehaviour
@@ -38,6 +40,9 @@ public class ScoreManager : MonoBehaviour
     public int chain = 0;
     public int scoreRun = 0;
     public int score = 0;
+
+    public static int multiplier = 1;
+    
 
     [Header("Check this box to reset the ProspectorHighScore to 100")] // c
     public bool checkToResetHighScore = false;
@@ -79,16 +84,34 @@ public class ScoreManager : MonoBehaviour
                 chain++; // increase the score chain
                 scoreRun += chain; // add score for this card to run
                 break;
+            case eScoreEvent.mineGold:
+                multiplier++;
+                chain++;
+                scoreRun += chain;
+                break;
+            case eScoreEvent.mineSilver:
+                chain++;
+                scoreRun+=chain;
+                chain++;
+                scoreRun+=chain;
+                break;
 
             // These same things need to happen whether it’s a draw, win, or loss
             case eScoreEvent.draw: // Drawing a card 
-                                   // f
+                   
+                chain = 0; // resets the score chain
+                score += scoreRun;// * multiplier; // add scoreRun to total score
+                
+                scoreRun = 0; // reset scoreRun
+                
+                break;               // f
             case eScoreEvent.gameWin: // Won the round 
                                       // f
             case eScoreEvent.gameLoss: // Lost the round
                 chain = 0; // resets the score chain
                 score += scoreRun; // add scoreRun to total score
                 scoreRun = 0; // reset scoreRun
+                
                 break;
         }
 
@@ -203,7 +226,9 @@ public class ScoreManager : MonoBehaviour
         List<Vector2> fsPts;
         switch (evt)
         {
-            case eScoreEvent.mine:// Remove a mine card
+            case eScoreEvent.mine:
+            case eScoreEvent.mineGold:  
+            case eScoreEvent.mineSilver:// Remove a mine card
                                   // Create a FloatingScore for this score
                 GameObject go = Instantiate<GameObject>(floatingScorePrefab);
                 go.transform.SetParent(canvasTrans);
@@ -251,6 +276,7 @@ public class ScoreManager : MonoBehaviour
             case eScoreEvent.gameWin:// Won the round
             case eScoreEvent.gameLoss:// Lost the round
                                       // Add fsFirstInRun to the ScoreBoard score
+                
                 if (fsFirstInRun != null)
                 {
                     // Create points for the Bézier curve
@@ -269,6 +295,7 @@ public class ScoreManager : MonoBehaviour
 
                     fsFirstInRun = null; // Clear fsFirstInRun so it’s created again
                 }
+                
                 break;
 
         }

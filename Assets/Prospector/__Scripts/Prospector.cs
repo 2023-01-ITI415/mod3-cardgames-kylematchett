@@ -39,6 +39,9 @@ public class Prospector : MonoBehaviour
         // These two lines replace the Start() call we commented out in Deck
         deck.InitDeck();
         Deck.Shuffle(ref deck.cards);
+        for(int i =0;i<deck.cards.Count;i++){
+            //Debug.Log("2 " + deck.cards[i] + " " + deck.cards[i].cardType);
+        }
         drawPile = ConvertCardsToCardProspectors(deck.cards);
         LayoutMine();
         MoveToTarget(Draw());
@@ -109,9 +112,7 @@ public class Prospector : MonoBehaviour
             int z = int.Parse(slot.layer[slot.layer.Length - 1].ToString());
             // Set the localPosition of the card based on theslot information
             cp.SetLocalPos(new Vector3(
-            jsonLayout.multiplier.x * slot.x,
-            jsonLayout.multiplier.y * slot.y,
-            -z));
+            jsonLayout.multiplier.x * slot.x, jsonLayout.multiplier.y * slot.y, -z));
             // d
 
             cp.layoutID = slot.id;
@@ -266,7 +267,12 @@ public class Prospector : MonoBehaviour
                     S.mine.Remove(cp); // Remove it from the tableau List 
                     S.MoveToTarget(cp); // Make it the target card
                     S.SetMineFaceUps();
-                    ScoreManager.TALLY(eScoreEvent.mine);
+                    if(cp.cardType == Card.type.gold)
+                        ScoreManager.TALLY(eScoreEvent.mineGold);
+                    else if(cp.cardType == Card.type.silver)
+                        ScoreManager.TALLY(eScoreEvent.mineSilver);
+                    else
+                        ScoreManager.TALLY(eScoreEvent.mine);
                 }
                 break;
         }
