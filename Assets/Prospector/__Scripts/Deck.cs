@@ -193,12 +193,15 @@ public class Deck : MonoBehaviour
             refCards.RemoveAt(i);
         }
 
-        while (refCards.Count >= 23)
+        while (refCards.Count >= 25)
         {
             cards1.Add(refCards[0]);
             refCards.RemoveAt(0);
         }
-
+        foreach(Card x in refCards){
+            if(x.cardType == Card.type.gold || x.cardType == Card.type.silver)
+                Debug.Log("here");
+        }
         Shuffle2(ref cards1);
         foreach (Card c in refCards)
         {
