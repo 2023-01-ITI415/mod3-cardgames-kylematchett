@@ -266,7 +266,7 @@ public class Card : MonoBehaviour
     void PopulateSpriteRenderers()
     {
         // If we’ve already populated spriteRenderers, just return. // a
-        if (spriteRenderers != null) return;
+        //if (spriteRenderers != null) return;
         // GetComponentsInChildren is slow, but we’re only doing it once per card
         spriteRenderers = GetComponentsInChildren<SpriteRenderer>();
     }

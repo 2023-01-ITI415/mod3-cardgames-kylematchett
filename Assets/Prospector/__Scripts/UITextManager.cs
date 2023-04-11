@@ -4,8 +4,7 @@ using UnityEngine;
 using TMPro;
 public class UITextManager : MonoBehaviour
 {
-    private
-static UITextManager S;
+    private static UITextManager S;
 
     [Header("Inscribed")]
     public TMP_Text gameOverText;

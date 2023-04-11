@@ -109,12 +109,12 @@ public class ScoreManager : MonoBehaviour
                                       // f
             case eScoreEvent.gameLoss: // Lost the round
                 chain = 0; // resets the score chain
-                score += scoreRun; // add scoreRun to total score
+                 // add scoreRun to total score
                 scoreRun = 0; // reset scoreRun
                 
                 break;
         }
-
+        //score += scoreRun;
         string scoreStr = score.ToString("#,##0"); // The 0 is a zero // g
                                                    // This second switch statement handles round wins and losses
         switch (evt)
