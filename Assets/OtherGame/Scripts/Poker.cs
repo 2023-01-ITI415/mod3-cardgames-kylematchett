@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(Deck))]
 // a
@@ -138,9 +138,16 @@ public class Poker : MonoBehaviour
         Debug.Log("here");
         PlayerPrefs.SetInt("highscore",highScore);
         highScoreText.text = $"High Score: {highScore:#,###}";
+        Invoke("ReloadLevel", 2f);
         
     }
+    void ReloadLevel()
+    {
+        // Reload the scene, resetting the game
+        SceneManager.LoadScene("Poker");
+        
 
+    }
     //royal flush: 100
     //straight flush: 75
     //four: 50
